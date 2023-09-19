@@ -18,7 +18,7 @@ import vtoq
 def main():
     fn_tsv, fn_json = sys.argv[1], sys.argv[2] if len(sys.argv) == 3 else None
     if len(sys.argv) != 3 or not os.path.exists(fn_tsv):
-        print("Usage:\ntest_vtoq.py filename.tsv")
+        print("Usage:\ntest_vtoq.py filename.tsv config.json")
         return
 
     #Here we defined the annotation classifications for QuPath (name, color as 6 bytes RGB hex value)
