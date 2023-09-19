@@ -37,7 +37,6 @@ def main():
             elif not os.path.isfile(fn_mld):
                 print(fn_mld, 'does not exist')
             else:
-                print(fn_image)
                 #This is NDPI specific, but the idea to split this function out of do_convert is that
                 #maybe we'll be able to read the scale_factor and offset a different way
                 scale_factor, offset = vtoq.get_scale_offset(fn_image)
