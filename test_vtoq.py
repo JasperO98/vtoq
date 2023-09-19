@@ -25,7 +25,7 @@ def main():
     with open(fn_json) as f:
         #The keys are the ROI indexes used in Visiopharm
         classes = {int(c): vtoq.Classification(name, int(rgb, 16)) for c, (name, rgb) in json.load(f).items()}
-    
+
     #Iterate through the TSV file making dictionaries from the header line
     with open(fn_tsv, newline='') as csvfile:
         reader = csv.DictReader(csvfile, delimiter='\t')
@@ -40,7 +40,8 @@ def main():
                 #This is NDPI specific, but the idea to split this function out of do_convert is that
                 #maybe we'll be able to read the scale_factor and offset a different way
                 scale_factor, offset = vtoq.get_scale_offset(fn_image)
-                vtoq.do_convert(fn_mld, fn_image, classes=classes, overwrite=True, scale_factor=scale_factor, offset=offset)
+                fn_json = os.path.join('json', f'{".".join(os.path.split(fn_image)[1].split(".")[:-1])}.json')
+                vtoq.do_convert(fn_mld, fn_image, fn_json, classes=classes, overwrite=True, scale_factor=scale_factor, offset=offset)
 
 if __name__ == '__main__':
     main()

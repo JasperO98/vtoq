@@ -1,5 +1,6 @@
 # Custom
 tsv/*
+json/*
 *\.sh
 samples.txt
 %*
