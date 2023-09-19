@@ -173,6 +173,6 @@ def do_convert(fn_mld, fn_image, fn_json=None, classes=None, overwrite=True, deb
             fc['features'].append(f)
 
     with open(fn_json, "w") as fp:
-        json.dump(fc,fp),indent=4)
+        json.dump(fc,fp, indent=4)
 
     return mld
