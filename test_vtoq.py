@@ -13,6 +13,7 @@
 #   limitations under the License.
 
 import json, csv, sys, os
+from tqdm.auto import tqdm
 import vtoq
 
 def main():
@@ -23,25 +24,29 @@ def main():
 
     #Here we defined the annotation classifications for QuPath (name, color as 6 bytes RGB hex value)
     with open(fn_json) as f:
-        #The keys are the ROI indexes used in Visiopharm
+        # The keys are the ROI indexes used in Visiopharm
         classes = {int(c): vtoq.Classification(name, int(rgb, 16)) for c, (name, rgb) in json.load(f).items()}
 
     #Iterate through the TSV file making dictionaries from the header line
     with open(fn_tsv, newline='') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter='\t')
+        reader = list(csv.DictReader(csvfile, delimiter='\t'))
+        pbar = tqdm(total=len(reader))
         for row in reader:
             fn_image = row['Image']
             fn_mld = row['LayerData']
             if not os.path.isfile(fn_image):
-                print(fn_image, 'does not exist')
+                pbar.set_description(f'{fn_image} does not exist')
             elif not os.path.isfile(fn_mld):
-                print(fn_mld, 'does not exist')
+                pbar.set_description(f'{fn_mld} does not exist')
             else:
+                pbar.set_description(f'Converting {fn_mld}')
                 #This is NDPI specific, but the idea to split this function out of do_convert is that
                 #maybe we'll be able to read the scale_factor and offset a different way
                 scale_factor, offset = vtoq.get_scale_offset(fn_image)
                 fn_json = os.path.join('json', f'{".".join(os.path.split(fn_image)[1].split(".")[:-1])}.json')
                 vtoq.do_convert(fn_mld, fn_image, fn_json, classes=classes, overwrite=True, scale_factor=scale_factor, offset=offset)
+            pbar.update(1)
+        pbar.close()
 
 if __name__ == '__main__':
     main()

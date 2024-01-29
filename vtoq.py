@@ -142,7 +142,7 @@ def do_convert(fn_mld, fn_image, fn_json=None, classes=None, overwrite=True, deb
                 arr = reduce_polygon(arr, angle_th=angle_th, distance_th=distance_th)
 
             # Here we apply scale_factor and offset
-            arr = (arr*scale_factor+offset).astype(int)
+            arr = (arr*scale_factor+offset) # .astype(int)
 
             #We need at least 3 points for a valid polygon
             if arr.shape[0] < 3:
